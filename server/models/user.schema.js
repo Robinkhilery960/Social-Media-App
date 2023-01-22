@@ -1,5 +1,7 @@
 const mongoose =require("mongoose")
- 
+ const bcryptjs=require("bcryptjs") 
+ const jwt=require("jsonwebtoken")  
+
 const userSchema= new mongoose.Schema({
     fullName:{
         type:String,
@@ -77,5 +79,18 @@ const userSchema= new mongoose.Schema({
     timestamps:true
 }
 )
+
+
+// encrypt password 
+
+userSchema.pre("save", async function(next){
+    // this function will run on each time you are saving something in  database even if i will modify name then it will also run  so to solve his we uses isModified method id password is modified then do hashing 
+    if(this.isModified("password")){
+         this.password=await bcryptjs.hash(this.password,10)
+         return next()
+    }
+    return next()
+}) 
+
 
 module.exports=mongoose.model("user",userSchema)
