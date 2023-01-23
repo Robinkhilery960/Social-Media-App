@@ -43,10 +43,10 @@ const authControllers = {
     });
 
     // access token 
-    const access_token=newUser.createAccessToken()
+    const access_token=await newUser.createAccessToken()
 
     // refresh token 
-    const refresh_token=newUser.createRefreshToken()
+    const refresh_token= await newUser.createRefreshToken()
 
     // set cookie
     res.cookie("refreshToken", refresh_token,{
@@ -70,9 +70,41 @@ const authControllers = {
   },
   login:async (req,res)=>{
     try { 
+      // collect data from the client 
+      const {email,password}=req.body
+      // validate that does 
+      if(!(email || password)) res.status(400).json({msg:"Email and password are required"})
+      // check   does user exist 
+      const user=await Users.findOne({email})
+      if(!user) res.status(400).json({msg:"User does not exist. Please Register"})
+
+       const isPasswordMatched=await user.comparePassword(password)
+       if(!isPasswordMatched) res.status(400).json({msg:"Invalid credentials-pass"})
+
+       // access token 
+    const access_token=await user.createAccessToken()
+
+    // refresh token 
+    const refresh_token= await user.createRefreshToken()
+
+    // set cookie
+    res.cookie("refreshToken", refresh_token,{
+        httpOnly:true,
+        path: '/api/refresh_token',
+        maxAge: 30*24*60*60*1000 // 30days
+    })
+
+    // send response
+
+    res.status(200).json({
+        msg:"Login completed successfully  ",
+        access_token,
+        user
+        
+    })
 
     } catch (error) {
-        
+        return res.status(500).json({msg:error.msg})
     }
   },
   logout:async (req,res)=>{
