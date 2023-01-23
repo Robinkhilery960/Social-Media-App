@@ -7,12 +7,12 @@ const authControllers=require("../controllers/authController.js")
 const router=express.Router()
 
 
-router.post("/register",authControllers.register())
+router.post("/register",authControllers.register)
 
-router.post("/login",authControllers.login())
+router.post("/login",authControllers.login)
 
-router.post("/logout")
+router.post("/logout",authControllers.logout)
 
-router.post("/refresh_token")
+router.post("/refresh_token",authControllers.generateAccessToken)
 
 module.exports=router

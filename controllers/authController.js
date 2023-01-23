@@ -1,4 +1,5 @@
 const Users = require("../models/user.schema.js");
+const jwt=require("jsonwebtoken")
 
 const authControllers = {
   register: async (req, res) => {
@@ -24,7 +25,7 @@ const authControllers = {
     // check if email exist  or not
     const user_email = await Users.findOne({ email });
     if (user_email)
-      return res.status(400).json({ msg: "This user name already exists." });
+      return res.status(400).json({ msg: "This email already exists." });
 
     // check password length
     if (password.length < 6)
@@ -36,7 +37,7 @@ const authControllers = {
         // create a user 
     const newUser = await Users.create({
       fullName,
-      userName,
+      userName:newUserName,
       email,
       password,
       gender,
@@ -56,6 +57,7 @@ const authControllers = {
     })
 
     // send response
+    newUser.password=""
 
     res.status(200).json({
         msg:"Registration completed successfully  ",
@@ -64,6 +66,7 @@ const authControllers = {
         
     })
     } catch (error) {
+          console.log("error in  register  controller  ")
          return res.status(500).json({msg: err.message})
     }
   
@@ -75,7 +78,7 @@ const authControllers = {
       // validate that does 
       if(!(email || password)) res.status(400).json({msg:"Email and password are required"})
       // check   does user exist 
-      const user=await Users.findOne({email})
+      const user=await Users.findOne({email}).populate("followers following", "avatar userName fullName followers following")
       if(!user) res.status(400).json({msg:"User does not exist. Please Register"})
 
        const isPasswordMatched=await user.comparePassword(password)
@@ -95,7 +98,7 @@ const authControllers = {
     })
 
     // send response
-
+    user.password=""
     res.status(200).json({
         msg:"Login completed successfully  ",
         access_token,
@@ -109,18 +112,48 @@ const authControllers = {
   },
   logout:async (req,res)=>{
     try {
-        
+        res.clearCookie("refreshToken",{
+          path:"/api/refresh_token"
+        })
+        res.status(200).json({msg:"Logout successfully completed"})
     } catch (error) {
-        
+        return res.status(500).json({msg:"Logout failed"})
     }
   },
   generateAccessToken:async (req,res)=>{
     try {
-        
+      // get refresh token from cookies 
+        const refresh_token=req.cookies.refreshToken
+        if(!refresh_token) return res.status(400).json({msg:"Please login"})
+        // 
+        const result=jwt.verify(refresh_token,process.env.REFRESH_TOKEN_SECRET)
+        if(!result) return res.status(400).json({msg:"Refresh Token is not valid"})
+
+        const user= await Users.findById(result.id).select("-password").populate("followers following", "avatar userName fullName followers following")
+
+        if(!user) return res.status(400).json({msg:"User does not exist "})
+
+        // create access token 
+        const access_token = await user.createAccessToken()
+
+        if(!access_token) return res.status(400).json({msg:" Access token not created "})
+
+        // send the response 
+        res.status(200).json({msg:"access token created successfully", user} )
     } catch (error) {
-        
+        console.log("Error in generateAccessToken controller ")
+        return res.status(400).json({msg:error.msg})
     }
-  }
-  
-  
+  } 
+
+  /* 
+  TODO: More Controller to work upon 
+  1. Forget password
+  2. Reset password
+  3. Change password
+  4. get Profile 
+  */ 
 };
+
+
+module.exports=authControllers
