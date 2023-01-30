@@ -25,8 +25,9 @@ useEffect(()=>{
       <div className="App">
         <div className="main">
           <h1>Hello client </h1>
+          <Header/>
+          {/* {auth.token &&<Header/>} */}
           <Routes>  
-            {auth.token && <Header/>}
           <Route path="/" element={auth.token?<Home/>:<Login/>}/>  
           <Route path="/:page" element={<PageRender/>}/>  
           <Route path="/:page/:id" element={<PageRender/>}/>  

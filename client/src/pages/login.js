@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState,useEffect } from "react";
+import { Link ,useNavigate} from "react-router-dom";
 import { login } from "../redux/actions/authAction";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 function Login() {
   const initialState = { email: "", password: "" };
@@ -11,8 +11,10 @@ function Login() {
   const [typePass, setTypePass] = useState(false);
 
   const { email, password } = userData;
-
+  const {auth}=useSelector(state=>state)
   const dispatch = useDispatch();
+  const navigate=useNavigate()
+
 
   const handleChangeInput = (e) => {
     console.log(e.target);
@@ -20,10 +22,22 @@ function Login() {
     setUserData({ ...userData, [name]: value });
   };
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(login(userData));
   };
+
+
+  useEffect(() => {
+    // access token exist  means already login
+    if (auth.token) {
+      // will take you to the home
+      navigate("/");
+    }
+  }, [auth.token, navigate]);
+
+  
   return (
     <div className="auth_page">
       <h3 className="text-uppercase text-center mb-2">The NETWORK</h3>

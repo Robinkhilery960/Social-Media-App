@@ -1,7 +1,6 @@
 import { postDataApi } from "../../utils/fetchData";
 import valid from "../../utils/valid";
-import { GLOBALTYPES } from "./globalTypes";
-
+import { GLOBALTYPES } from "./globalTypes"; 
 
 export const login = (data) => async (dispatch) => {
   try {
@@ -77,3 +76,17 @@ export const register = (data) => async (dispatch) => {
     });
   }
 };
+
+
+export const logout=()=>async(dispatch)=>{
+     try {
+      localStorage.removeItem("firstLogin")
+      await postDataApi("logout")
+      window.Location.href="/"
+     } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+     }
+}
