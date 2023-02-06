@@ -75,14 +75,17 @@ const authControllers = {
     try { 
       // collect data from the client 
       const {email,password}=req.body
+      // console.log(email,password)
       // validate that does 
-      if(!(email || password)) res.status(400).json({msg:"Email and password are required"})
+      if(!(email || password)) return res.status(400).json({msg:"Email and password are required"})
       // check   does user exist 
       const user=await Users.findOne({email}).populate("followers following", "avatar userName fullName followers following")
-      if(!user) res.status(400).json({msg:"User does not exist. Please Register"})
+      // console.log(user)
+      if(!user) return res.status(400).json({msg:"User does not exist. Please Register"})
 
        const isPasswordMatched=await user.comparePassword(password)
-       if(!isPasswordMatched) res.status(400).json({msg:"Invalid credentials-pass"})
+      //  console.log(isPasswordMatched)
+       if(!isPasswordMatched) return res.status(400).json({msg:"Invalid credentials-pass"})
 
        // access token 
     const access_token=await user.createAccessToken()
@@ -107,7 +110,7 @@ const authControllers = {
     })
 
     } catch (error) {
-        return res.status(500).json({msg:error.msg})
+        return res.status(500).json({msg:error.message})
     }
   },
   logout:async (req,res)=>{
@@ -120,11 +123,16 @@ const authControllers = {
         return res.status(500).json({msg:"Logout failed"})
     }
   },
+
+
   generateAccessToken:async (req,res)=>{
     try {
       // get refresh token from cookies 
-        const refresh_token=req.cookies.refreshToken
+        const refresh_token=req.cookies.refreshToken 
+        console.log(refresh_token)
+        
         if(!refresh_token) return res.status(400).json({msg:"Please login"})
+        console.log("i am called")
         // 
         const result=jwt.verify(refresh_token,process.env.REFRESH_TOKEN_SECRET)
         if(!result) return res.status(400).json({msg:"Refresh Token is not valid"})
@@ -139,7 +147,7 @@ const authControllers = {
         if(!access_token) return res.status(400).json({msg:" Access token not created "})
 
         // send the response 
-        res.status(200).json({msg:"access token created successfully", user} )
+        res.status(200).json({msg:"access token created successfully", user,access_token} )
     } catch (error) {
         console.log("Error in generateAccessToken controller ")
         return res.status(400).json({msg:error.msg})

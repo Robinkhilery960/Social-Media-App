@@ -14,6 +14,7 @@ app.use(cookieParser())
 // routes 
 
 app.use("/api",require("./routes/authRouter.js"))
+app.use("/api",require("./routes/userRouter.js"))
 
 app.listen(process.env.PORT || 5000,(req,res)=>{
     console.log("Server is listening at PORT 5000")
