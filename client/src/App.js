@@ -1,4 +1,4 @@
- import {BrowserRouter as Router, Route,Routes} from "react-router-dom"; 
+ import {BrowserRouter as Router, Route,Routes,Navigate} from "react-router-dom"; 
  import PageRender from "./customRouter/pageRender";
  import Login from "./pages/login.js";
 import Register from "./pages/register.js";
@@ -7,10 +7,11 @@ import Alert from "./components/alert/Alert";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { refreshToken } from "./redux/actions/authAction";
-import Header from "./components/Header";
+import Header from "./components/header/Header"; 
 function App() {
   const {auth}=useSelector(state=>state)
   const dispatch=useDispatch()
+  const firstLogin=localStorage.getItem("firstLogin")
 
 useEffect(()=>{
   dispatch(refreshToken())
@@ -23,14 +24,14 @@ useEffect(()=>{
       <Alert/>
       <input type="checkbox" id="theme" />
       <div className="App">
-        <div className="main">
-          <h1>Hello client </h1>
-          <Header/>
-          {/* {auth.token &&<Header/>} */}
+        <div className="main"> 
+          {/* <Header/> */}
+          {auth.token && <Header/>}
           <Routes>  
           <Route path="/" element={auth.token?<Home/>:<Login/>}/>  
-          <Route path="/:page" element={<PageRender/>}/>  
-          <Route path="/:page/:id" element={<PageRender/>}/>  
+          <Route path="/register" element={<Register/>}/>  
+          <Route path="/:page" element={firstLogin?<PageRender/>:<Navigate to="/"/>}/>  
+          <Route path="/:page/:id" element={firstLogin?<PageRender/>:<Navigate to="/"/>}/>  
           </Routes>
           </div>
       </div> 
