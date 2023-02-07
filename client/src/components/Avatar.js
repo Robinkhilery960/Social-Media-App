@@ -1,4 +1,5 @@
 import React from 'react'
+import "../styles/avatar.css"
 import { useSelector } from 'react-redux'
 
 function Avatar({src,size}) {

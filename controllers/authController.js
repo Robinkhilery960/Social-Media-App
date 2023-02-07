@@ -135,10 +135,11 @@ const authControllers = {
         console.log("i am called")
         // 
         const result=jwt.verify(refresh_token,process.env.REFRESH_TOKEN_SECRET)
+        console.log(result)
         if(!result) return res.status(400).json({msg:"Refresh Token is not valid"})
 
         const user= await Users.findById(result.id).select("-password").populate("followers following", "avatar userName fullName followers following")
-
+        console.log(user)
         if(!user) return res.status(400).json({msg:"User does not exist "})
 
         // create access token 
@@ -150,7 +151,7 @@ const authControllers = {
         res.status(200).json({msg:"access token created successfully", user,access_token} )
     } catch (error) {
         console.log("Error in generateAccessToken controller ")
-        return res.status(400).json({msg:error.msg})
+        return res.status(400).json({msg:error.message})
     }
   } 
 
