@@ -32,11 +32,17 @@ const EditProfile = ({  setOnEdit }) => {
   const handleInput = (e) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
+    
+    
+
   };
 
   const handleSubmit=(e)=>{
     e.preventDefault()
-    dispatch(updateProfileUser({userData,avatar,auth}))
+     console.log(e.target)
+     const formData=new FormData(e.target)
+     console.log(formData)
+    dispatch(updateProfileUser({avatar, auth,userData})) 
   }
 
 
@@ -54,10 +60,10 @@ const EditProfile = ({  setOnEdit }) => {
         Close
       </button>
 
-      <form onSubmit={handleSubmit} enctype="multipart/form-data" >
+      <form onSubmit={handleSubmit}   >
         <div className="info_avatar">
           <img
-            src={avatar ? URL.createObjectURL(avatar) : auth.user.avatar}
+            src={avatar ?URL.createObjectURL(avatar): auth.user.avatar}
             alt="avatar"
             style={{ filter: theme ? `invert(1)` : `invert(0)` }}
           />
