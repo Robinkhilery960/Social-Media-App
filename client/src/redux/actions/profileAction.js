@@ -64,6 +64,9 @@ dispatch({type:PROFILE_TYPES.FOLLOW,payload:newUser})
 
 dispatch({type:GLOBALTYPES.AUTH,payload:{...auth,user:{...auth.user,following:[...auth.user.following,newUser]}}})
 
+const res= await patchDataApi(`user/${user._id}/follow`,null,auth.token)
+console.log(res)
+
 }
 
 export const unFollow=({users,user,auth})=>async(dispatch)=>{
@@ -74,4 +77,6 @@ dispatch({type:PROFILE_TYPES.UNFOLLOW,payload:newUser})
 
 dispatch({type:GLOBALTYPES.AUTH,payload:{...auth,user:{...auth.user,following:deleteData(auth.user.following,user._id)}}})
 
+const res= await patchDataApi(`user/${user._id}/unfollow`,null,auth.token)
+console.log(res)
 }
