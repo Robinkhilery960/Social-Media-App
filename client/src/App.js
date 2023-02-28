@@ -8,16 +8,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { refreshToken } from "./redux/actions/authAction";
 import Header from "./components/header/Header"; 
+import StatusModal from "./components/StatusModal";
+import { getPosts } from "./redux/actions/postAction";
+
 function App() {
-  const {auth}=useSelector(state=>state)
+  const {auth, status}=useSelector(state=>state)
   const dispatch=useDispatch()
   const firstLogin=localStorage.getItem("firstLogin")
+ console.log("auth.token",auth )
 
 useEffect(()=>{
   dispatch(refreshToken())
 },[dispatch])
 // why dispatch in dependencies array 
 
+useEffect(()=>{
+  auth.token && 
+   dispatch(getPosts(auth.token))
+},[dispatch, auth.token ])
+// why dispatch in dependencies array 
 
   return ( 
     <Router>
@@ -27,6 +36,7 @@ useEffect(()=>{
         <div className="main"> 
           {/* <Header/> */}
           {auth.token && <Header/>}
+          {status && <StatusModal/>}
           <Routes>  
           <Route path="/" element={auth.token?<Home/>:<Login/>}/>  
           <Route path="/register" element={<Register/>}/>  

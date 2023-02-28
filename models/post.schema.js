@@ -5,11 +5,11 @@ const postSchema = new mongoose.Schema({
   images: {
     type: Array,
     default: [],
+    require:true
   },
-  likes: [{ type: mongoose.Types.ObjectId(), ref: "user" }],
-  comments: [{ type: mongoose.Types.ObjectId(), ref: "comment" }],
-  user: [{ type: mongoose.Types.ObjectId(), ref: "user" }],
-
+  likes: [{ type: mongoose.Types.ObjectId, ref: "user" }],
+  comments: [{ type: mongoose.Types.ObjectId, ref: "comment" }],
+  user: { type: mongoose.Types.ObjectId, ref: "user" },
 });
 
 module.exports = mongoose.model("post", postSchema);
