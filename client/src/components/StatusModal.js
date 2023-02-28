@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { GLOBALTYPES } from "../redux/actions/globalTypes";
 import { useSelector, useDispatch } from "react-redux";
 import "../styles/statusModal.css";
+import { createPost } from "../redux/actions/postAction";
 
 const StatusModal = () => {
   const [content, setContent] = useState("");
@@ -43,9 +44,18 @@ const StatusModal = () => {
   }
 
 
+  const handleSubmit=(e)=>{
+    e.preventDefault()
+    if(images.length===0) return dispatch({type:GLOBALTYPES.ALERT, payload:{error:"Please add Images"}})
+    dispatch(createPost({content, images, auth}))
+    setContent("")
+    setImages([])
+    
+  }
+
   return (
     <div className="status_modal">
-      <form>
+      <form onSubmit={handleSubmit} >
         <div className="status_header">
           <h5 className="m-0">Create Post</h5>
           <span
@@ -90,7 +100,7 @@ const StatusModal = () => {
           </div>
         </div>
         <div className="status_footer my-1">
-          <button className="btn btn-secondary w-100">Post</button>
+          <button type="submit" className="btn btn-secondary w-100">Post</button>
         </div>
       </form>
     </div>
