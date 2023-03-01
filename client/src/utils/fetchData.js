@@ -13,6 +13,8 @@ export const getDataApi=async(url,token)=>{
 }
 
 export const postDataApi=async(url,post,token)=>{
+    console.log("post api is called ",url,post,token )
+    
     try {
         const res=await axios.post(`/api/${url}`,post,{
            headers:{Authentication:token}
@@ -20,12 +22,13 @@ export const postDataApi=async(url,post,token)=>{
         console.log(res)
         return res   
     } catch (error) {
-        console.log("error in postDataApi")
-        console.log(error.message)
+        console.log("error in post DataApi")
+        console.log(error.message)   
     }
 }
 
 export const putDataApi=async(url,post,token)=>{
+    console.log("post api is called ")
     try {
         const res=await axios.put(`/api/${url}`,post,{
            headers:{Authentication:token}
@@ -38,6 +41,7 @@ export const putDataApi=async(url,post,token)=>{
 }
 
 export const patchDataApi=async(url,post,token)=>{
+    
     try {
         const res=await axios.patch(`/api/${url}`,post,{
            headers:{Authentication:token}

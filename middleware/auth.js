@@ -7,7 +7,7 @@ try{
 // grab the token 
 const token=req.header("Authentication")   
 
-console.log("i am called")
+console.log("auth is  called")
 console.log(token)
 if(!token) return res.status(400).json({msg:"Invalid Authentication"})
 

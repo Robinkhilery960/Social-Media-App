@@ -32,16 +32,13 @@ const EditProfile = ({  setOnEdit }) => {
   const handleInput = (e) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
-    
-    
-
+      
   };
 
   const handleSubmit=(e)=>{
     e.preventDefault()
      console.log(e.target)
-     const formData=new FormData(e.target)
-     console.log(formData)
+     
     dispatch(updateProfileUser({avatar, auth,userData})) 
   }
 

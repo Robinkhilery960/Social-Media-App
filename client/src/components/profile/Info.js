@@ -5,6 +5,8 @@ import Avatar from "../Avatar";
 import { getProfileUsers } from "../../redux/actions/profileAction";
 import EditProfile from "./EditProfile";
 import FollowBtn from "../FollowBtn";
+import Follower from "./Follower";
+import Following from "./Following";
 
 const Info = () => {
   const { auth, profile } = useSelector((state) => state);
@@ -12,6 +14,8 @@ const Info = () => {
   const { id } = useParams();
   const [userData, setUserData] = useState([]);
   const [onEdit, setOnEdit] = useState(false);
+  const [showFollower,setShowFollower]=useState(false)
+  const [showFollowing,setShowFollowing]=useState(false)
 
   console.log(auth.user);
   console.log(id === auth.user._id);
@@ -47,8 +51,8 @@ const Info = () => {
               )}
             </div>
             <div className="follow_btn">
-              <span className="mr-4">{user.followers.length} Followers</span>
-              <span className="ml-4">{user.following.length} Following</span>
+              <span className="mr-4" onClick={()=>setShowFollower(true)}>{user.followers.length} Followers</span>
+              <span className="ml-4" onClick={()=>setShowFollowing(true)}>{user.following.length} Following</span>
             </div>
             <h6>
               {user.fullName}
@@ -63,6 +67,8 @@ const Info = () => {
             <p>{user.story}</p>
           </div>
           {onEdit && <EditProfile setOnEdit={setOnEdit} />}
+          {showFollower && <Follower  users={user.followers} setShowFollower={setShowFollower}/>}
+          {showFollowing && <Following  users={user.following} setShowFollowing={setShowFollowing}/>}
         </div>
       ))}
     </div>

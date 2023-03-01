@@ -5,19 +5,25 @@ import { follow,unFollow} from '../redux/actions/profileAction'
 const FollowBtn = ({user}) => {
 
   const [followed,setFollowed]=useState(false)
-  
+  const [load,setLoad]=useState(false)
   const {auth,profile}=useSelector(state=>state)
   const dispatch=useDispatch()
 
 
-  const handleFollow=()=>{
+  const handleFollow=async()=>{
+    if(load) return 
     setFollowed(true)
-    dispatch(follow({users:profile.users,user,auth}))
+    setLoad(true)
+    await dispatch(follow({users:profile.users,user,auth}))
+    setLoad(false)
   }
 
-  const handleUnFollow=()=>{
+  const handleUnFollow=async()=>{
+    if(load) return 
     setFollowed(false)
-    dispatch(unFollow({users:profile.users,user,auth}))
+    setLoad(true)
+    await dispatch(unFollow({users:profile.users,user,auth}))
+    setLoad(false)
   }
 
   useEffect(()=>{

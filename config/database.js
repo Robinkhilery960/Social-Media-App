@@ -8,6 +8,6 @@ exports.connect=()=>{
         console.log("connection successful")
     }).catch((error)=>{
         console.log("connection failed")
-        console.log(error)
+        console.log(error.message)
     })
 }

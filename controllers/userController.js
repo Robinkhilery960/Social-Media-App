@@ -21,7 +21,8 @@ const userCtrl = {
 
   getUser: async (req, res) => {
     try {
-      const user = await Users.findById(req.params.id).select("-password");
+      const user = await Users.findById(req.params.id).select("-password")
+      .populate("followers following", "-password");
       if (!user) return res.status(400).json({ msg: " User does not exist " });
       res.json({ user });
     } catch (err) {
@@ -30,55 +31,19 @@ const userCtrl = {
   },
 
   updateUser: async (req, res) => {
-    // console.log(req)
-    // create an instance of the form using formidable
-    const form = formidable({
-      multiples: true,
-      keepExtensions: true,
-    });
-    //  console.log(form)
-    // now parse the request stream
-    form.parse(req, async function (error, fields, files) {
-      console.log("fields", fields);
-      console.log("files", files);
+    try {
+      const { avatar, fullName, mobile, address, story, website, gender } = req.body
+      if(!fullName) return res.status(400).json({msg: "Please add your full Name."})
 
-      const {fullName, mobile, website, address, story, gender, avatar }=fields
+      await Users.findOneAndUpdate({_id: req.user._id}, {
+          avatar, fullName, mobile, address, story, website, gender
+      })
 
-      try {
-        if (error) {
-          console.log(error.message);
-          return res.status(400).json({
-            msg: error.message,
-          });
-        }
+      res.json({msg: "Update Success!"})
 
-        if (!fields.fullName)
-          return res.status(400).json({ msg: "Please add your Full Name" });
-
-        let result;
-        if (files.file) {
-          result = await cloudinary.uploader.upload(files.file.filepath, {
-            folder: "avatars",
-          });
-        }
-
-            console.log(undefined===false) 
-        const user = await Users.findByIdAndUpdate(
-          req.user._id,
-          {  fullName, mobile, address,website, story, gender , avatar: result ? result.secure_url :avatar },
-          {
-            new: true,
-            runValidators: true,
-          }
-        );
-        console.log(user)
-        return res.status(200).json({ msg: " User Profile Updated  successfully!!", user });
-      } catch (error) {
-        return res.status(500).json({
-          msg: error.message,
-        });
-      }
-    });
+  } catch (err) {
+      return res.status(500).json({msg: err.message})
+  }
   },
 
   follow: async (req,res) => {

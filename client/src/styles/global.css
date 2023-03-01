@@ -49,10 +49,13 @@
   
   
   /*  --------AUTH------------- */
-  /* @import url("./auth.css")  */
+  @import url("./auth.css") 
   
   /*  --------AVATAR------------- */
-  @import url("./avatar.css") 
+  /* @import url("./avatar.css")     */
+
+  /*  --------PROFILE------------- */
+  /* @import url("./profile.css")  */
    
   
   

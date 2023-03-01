@@ -27,8 +27,8 @@ const postController = {
       // get all the posts from the user to whom user is following
       const posts = await Posts.find({
         user: [...req.user.following, req.user._id],
-      }); 
-      
+      }).populate("user likes", "avatar userName fullName"); 
+
       res.json({ msg: "posts found", result: posts.length, posts });
     } catch (err) {
       return res.status(500).json({ error: err.message });

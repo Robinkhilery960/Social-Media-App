@@ -17,7 +17,7 @@ function Login() {
 
 
   const handleChangeInput = (e) => {
-    console.log(e.target);
+    // console.log(e.target);
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
   };
@@ -34,6 +34,7 @@ function Login() {
     if (auth.token) {
       // will take you to the home
       navigate("/");
+
     }
   }, [auth.token, navigate]);
 
