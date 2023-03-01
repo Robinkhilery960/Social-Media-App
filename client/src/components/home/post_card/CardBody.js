@@ -1,4 +1,4 @@
-import React from 'react'
+import React ,{useState} from 'react'
 import Carousel from '../../Carousel'
 const CardBody = ({post}) => {
   
@@ -13,8 +13,8 @@ const CardBody = ({post}) => {
         </span>
         {
           post.content.length>60 && 
-          <span className='readMore' onClick={setReadMore(!readMore)}>
-                {readMore?"Hide Content":"Read More"}
+          <span className='readMore' onClick={()=>setReadMore(!readMore)}>
+                {readMore?"   Hide Content":"Read More"}
           </span>
         }
       </div> 

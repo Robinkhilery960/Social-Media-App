@@ -29,6 +29,7 @@ export const checkImage = (file) => {
  }
 
 export const imageUpload = async (images) => {
+  console.log(images)
   let imgArr = [];
   for (const item of images) {
     const formData = new FormData();

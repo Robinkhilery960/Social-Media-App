@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { GLOBALTYPES } from "../redux/actions/globalTypes";
 import { useSelector, useDispatch } from "react-redux";
 import "../styles/statusModal.css";
 import { createPost } from "../redux/actions/postAction";
+import { updatePost } from "../redux/actions/postAction";
 
 const StatusModal = () => {
   const [content, setContent] = useState("");
   const [images,setImages]=useState([])
   const [stream, setStream]=useState(false)
-  const { auth, theme } = useSelector((state) => state);
+  const { auth, theme, status } = useSelector((state) => state);
   const dispatch = useDispatch();
 
 
@@ -46,12 +47,24 @@ const StatusModal = () => {
 
   const handleSubmit=(e)=>{
     e.preventDefault()
+    console.log(images.length)
     if(images.length===0) return dispatch({type:GLOBALTYPES.ALERT, payload:{error:"Please add Images"}})
-    dispatch(createPost({content, images, auth}))
+  if(status.onEdit){
+      dispatch(updatePost({content, images, auth, status}))
+  }else{
+      dispatch(createPost({content, images, auth}))
+  } 
     setContent("")
     setImages([])
     
   }
+
+  useEffect(()=>{
+    if(status.onEdit){
+      setContent(status.content)
+      setImages(status.images)
+    }
+  },[status])
 
   return (
     <div className="status_modal">
@@ -77,7 +90,7 @@ const StatusModal = () => {
             {
               images.map((image, index)=>(
                 <div key={index} id="file_img">
-                  <img src={URL.createObjectURL(image)} alt="images" className="img_thumbnail" style={{filter:theme?"invert(1)":"invert(0)"}}/>
+                  <img src={image.url?image.url:URL.createObjectURL(image)} alt="images" className="img_thumbnail" style={{filter:theme?"invert(1)":"invert(0)"}}/>
                   <span onClick={()=>deleteImages(index)}>&times;</span>
                 </div>
               ))

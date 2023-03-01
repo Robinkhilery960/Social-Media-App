@@ -27,9 +27,21 @@ const postController = {
       // get all the posts from the user to whom user is following
       const posts = await Posts.find({
         user: [...req.user.following, req.user._id],
-      }).populate("user likes", "avatar userName fullName"); 
+      }).sort('-createdAt')
+      .populate("user likes", "avatar userName fullName"); 
 
       res.json({ msg: "posts found", result: posts.length, posts });
+    } catch (err) {
+      return res.status(500).json({ error: err.message });
+    }
+  },
+
+
+  updatePosts: async (req, res) => {
+    try {
+       const {content, images}= req.body
+       const post=await Posts.findOneAndUpdate({_id:req.params.id},{content, images}).populate("user likes", "avatar userName fullName")
+       res.json({msg:"Updated Posts", newPost:{...post, content, images}})
     } catch (err) {
       return res.status(500).json({ error: err.message });
     }

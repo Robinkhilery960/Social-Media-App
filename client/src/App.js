@@ -24,7 +24,8 @@ useEffect(()=>{
 
 useEffect(()=>{
   auth.token && 
-   dispatch(getPosts(auth.token))
+  dispatch(getPosts(auth.token))
+  console.log("After calling get post ")
 },[dispatch, auth.token ])
 // why dispatch in dependencies array 
 

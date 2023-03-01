@@ -3,10 +3,19 @@ import Avatar from "../../Avatar";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import { GLOBALTYPES } from "../../../redux/actions/globalTypes";
 
 const CardHeader = ({ post }) => {
-  const { auth } = useSelector((state) => state);
-console.log(post)
+  console.log("cardHeader",post)
+  const { auth } = useSelector((state) => state); 
+  const dispatch=useDispatch()
+
+  const handleEditPost=()=>{
+    dispatch({type:GLOBALTYPES.STATUS, payload:{...post,onEdit:true}})
+  }
+  const handleRemovePost=()=>{
+    console.log(post)
+  }
   return (
     <div className="card_header">
       <div className="d-flex">
@@ -40,10 +49,10 @@ console.log(post)
         <div className="dropdown-menu">
           {auth.user._id === post.user._id && (
             <>
-              <div className="dropdown-item">
+              <div className="dropdown-item" onClick={handleEditPost}>
                 <span className="material-icons">create</span> Edit Post
               </div>
-              <div className="dropdown-item">
+              <div className="dropdown-item" onClick={handleRemovePost}>
                 <span className="material-icons">delete_outline</span> Remove
                 Post
               </div>
