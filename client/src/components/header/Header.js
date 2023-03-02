@@ -9,7 +9,8 @@ function Header() {
       <nav className="navbar navbar-expand-lg bg-body-tertiary justify-content-between align-middle ">
         <div className="container-fluid">
           <Link to="/">
-            <h1 className="navbar-brand text-uppercase p-0 m-0 ">
+            <h1 className="navbar-brand text-uppercase p-0 m-0 " onClick={()=>window.scrollTo
+            ({top:0})}>
               THE NETWORK
             </h1>
           </Link>

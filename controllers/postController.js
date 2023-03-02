@@ -36,7 +36,6 @@ const postController = {
     }
   },
 
-
   updatePosts: async (req, res) => {
     try {
        const {content, images}= req.body
@@ -46,6 +45,32 @@ const postController = {
       return res.status(500).json({ error: err.message });
     }
   },
+  
+  likePost: async (req, res) => {
+    try {
+      console.log("like post starting")
+      const post=await Posts.find({_id:req.params.id, likes:req.user._id})
+      console.log(post)
+      if(post.length>0) return res.status(400).json({msg:"You alredy liked this post "})
+
+       const newPost=await Posts.findOneAndUpdate({_id:req.params.id}, {$push:{likes:req.user._id}},{new:true})
+       res.json({msg:"Post Liked",newPost})
+    } catch (err) {
+      return res.status(500).json({ error: err.response.data.msg });
+    }
+  },
+  
+  UnlikePost: async (req, res) => {
+    try {  
+
+       const newPost=await Posts.findOneAndUpdate({_id:req.params.id}, {$pull:{likes:req.user._id}},{new:true})
+       if(!newPost) return res.status(400).json({msg:"This post does not exist"})
+       res.json({msg:"Post unliked",newPost})
+    } catch (err) {
+      return res.status(500).json({ error: err.response.data.msg });
+    }
+  },
+
 };
 
 module.exports = postController;

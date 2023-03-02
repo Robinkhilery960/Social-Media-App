@@ -18,8 +18,7 @@ export const postDataApi=async(url,post,token)=>{
     try {
         const res=await axios.post(`/api/${url}`,post,{
            headers:{Authentication:token}
-        })
-        console.log(res)
+        }) 
         return res   
     } catch (error) {
         console.log("error in post DataApi")

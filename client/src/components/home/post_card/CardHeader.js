@@ -6,7 +6,7 @@ import moment from "moment";
 import { GLOBALTYPES } from "../../../redux/actions/globalTypes";
 
 const CardHeader = ({ post }) => {
-  console.log("cardHeader",post)
+  // console.log("cardHeader",post)
   const { auth } = useSelector((state) => state); 
   const dispatch=useDispatch()
 
@@ -37,7 +37,7 @@ const CardHeader = ({ post }) => {
 
       <div className="nav-item dropdown">
         <span
-          className="  material-icons  cursor-pointer "
+          className="  material-icons    "
           id="moreLink"
            
           data-bs-toggle="dropdown"

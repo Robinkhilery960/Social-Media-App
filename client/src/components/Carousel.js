@@ -1,6 +1,9 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 const Carousel = ({ images, id }) => {
+
+  const {theme}=useSelector(state=>state)
   const isActive = (index) => {
     if (index === 0) return "active";
   };
@@ -25,6 +28,7 @@ const Carousel = ({ images, id }) => {
               className="d-block w-100 "
               src={img.url}
               alt={`${index} slide`}
+              style={{filter:theme?"invert(1)":"invert(0)"}}
             />
           </div>
         ))}

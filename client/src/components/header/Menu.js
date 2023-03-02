@@ -9,7 +9,7 @@ function Menu() {
     const { auth, theme } = useSelector((state) => state);
   const dispatch = useDispatch();
   const { pathname } = useLocation();
-  console.log(auth);
+  // console.log(auth);
   const navLinks = [
     { label: "Home", icon: "home", path: "/" },
     { label: "Message", icon: "near_me", path: "/message" },

@@ -5,7 +5,7 @@ import Toast from './Toast'
 
 function Alert() {
     const {alert}=useSelector((state)=>state)
-    console.log(alert)
+    // console.log(alert)
     
   return (
     <div>

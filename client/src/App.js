@@ -15,7 +15,7 @@ function App() {
   const {auth, status}=useSelector(state=>state)
   const dispatch=useDispatch()
   const firstLogin=localStorage.getItem("firstLogin")
- console.log("auth.token",auth )
+//  console.log("auth.token",auth )
 
 useEffect(()=>{
   dispatch(refreshToken())
@@ -25,7 +25,7 @@ useEffect(()=>{
 useEffect(()=>{
   auth.token && 
   dispatch(getPosts(auth.token))
-  console.log("After calling get post ")
+  // console.log("After calling get post ")
 },[dispatch, auth.token ])
 // why dispatch in dependencies array 
 
